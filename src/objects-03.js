@@ -24,7 +24,7 @@
  * example: getVolumeOfBox({length: 2.4, width: 3, height: 1.8}) // => 12.96
  */
 function getVolumeOfBox(box) {
-  // write your code here & return value
+  return +Object.values(box).reduce((a, b) => a * b).toFixed(2);
 }
 
 module.exports = {

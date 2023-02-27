@@ -62,7 +62,21 @@
  * then use the copied object like a lookup table
  */
 function getColorValue(color) {
-  // write your code here & return value
+  const colorCodes = {
+    silver: -2,
+    gold: -1,
+    black: 0,
+    brown: 1,
+    red: 2,
+    orange: 3,
+    yellow: 4,
+    green: 5,
+    blue: 6,
+    violet: 7,
+    grey: 8,
+    white: 9,
+  };
+  return colorCodes[color];
 }
 
 /**
@@ -79,7 +93,7 @@ function getColorValue(color) {
  * then use the copied object like a lookup table
  */
 function getMultiplierValue(color) {
-  // write your code here & return value
+  return 10 ** getColorValue(color);
 }
 
 /**
@@ -106,7 +120,8 @@ function getMultiplierValue(color) {
  *
  */
 function getThreeBandValue(bands) {
-  // write your code here & return value
+  return (getColorValue(bands.color1) * 10 + getColorValue(bands.color2))
+    * getMultiplierValue(bands.multiplier);
 }
 
 /**
@@ -131,58 +146,79 @@ function getThreeBandValue(bands) {
  *
  */
 function formatNumber(val) {
-  // write your code here & return value
+  if (val >= 1e9) {
+    return `${val / 1e9}G`;
+  }
+
+  if (val >= 1e6) {
+    return `${val / 1e6}M`;
+  }
+
+  if (val >= 1e3) {
+    return `${val / 1e3}k`;
+  }
+
+  return `${val}`;
 }
 
 /**
- * Returns the tolerance of the resistor according to its color value
- * @param {string} color - the color of the tolerance band to
- * @returns {string} - the tolerance value in percent using the ± symbol
- *
- * Go to http://bit.ly/2NjS274 see what colors are used for the tolerance
- * lookup table.
- *
- * must create a toleranceCodes object inside this function so it is private,
- * then use the object like a lookup table
- *
- * example: 'brown' => '±1%'
- * example: 'red' => '±2%'
- * example: 'green' => '±0.5%'
- */
+   * Returns the tolerance of the resistor according to its color value
+   * @param {string} color - the color of the tolerance band to
+   * @returns {string} - the tolerance value in percent using the ± symbol
+   *
+   * Go to http://bit.ly/2NjS274 see what colors are used for the tolerance
+   * lookup table.
+   *
+   * must create a toleranceCodes object inside this function so it is private,
+   * then use the object like a lookup table
+   *
+   * example: 'brown' => '±1%'
+   * example: 'red' => '±2%'
+   * example: 'green' => '±0.5%'
+   */
 function getTolerance(color) {
-  // write your code here & return value
+  return `±${{
+    brown: 1,
+    red: 2,
+    green: 0.5,
+    blue: 0.25,
+    violet: 0.1,
+    grey: 0.05,
+    gold: 5,
+    silver: 10,
+  }[color]}%`;
 }
 
 /**
- *
- * @param {object} bands - the object with the 4 bands
- * @param {string} bands.color1 - the first color
- * @param {string} bands.color2 - the second color
- * @param {string} bands.multiplier - the multiplier color
- * @param {string} bands.tolerance - the tolerance color
- * @returns {string} - a string representation of the resistor value according to
- * the format in the examples
- *
- * example: {
- *   color1: 'brown',
- *   color2: 'red',
- *   multiplier: 'black',
- *   tolerance: 'brown'
- * }
- *   => '12 Ohms ±1%'
- *
- * example: {
- *   color1: 'green',
- *   color2: 'blue',
- *   multiplier: 'red',
- *   tolerance: 'grey'
- * }
- *   => 'Resistor value: 5.6k Ohms ±0.05%'
- *
- * must use functions in this file to build the string using a template literal
- */
+   *
+   * @param {object} bands - the object with the 4 bands
+   * @param {string} bands.color1 - the first color
+   * @param {string} bands.color2 - the second color
+   * @param {string} bands.multiplier - the multiplier color
+   * @param {string} bands.tolerance - the tolerance color
+   * @returns {string} - a string representation of the resistor value according to
+   * the format in the examples
+   *
+   * example: {
+   *   color1: 'brown',
+   *   color2: 'red',
+   *   multiplier: 'black',
+   *   tolerance: 'brown'
+   * }
+   *   => '12 Ohms ±1%'
+   *
+   * example: {
+   *   color1: 'green',
+   *   color2: 'blue',
+   *   multiplier: 'red',
+   *   tolerance: 'grey'
+   * }
+   *   => 'Resistor value: 5.6k Ohms ±0.05%'
+   *
+   * must use functions in this file to build the string using a template literal
+   */
 function getResistorOhms(bands) {
-  // write your code here & return value
+  return `Resistor value: ${formatNumber(getThreeBandValue(bands))} Ohms ${getTolerance(bands.tolerance)}`;
 }
 
 module.exports = {
